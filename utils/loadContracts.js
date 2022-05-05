@@ -13,8 +13,9 @@ const { abi: ExecAbi } = require("@eulerxyz/euler-interfaces/abis/modules/Exec.j
 const WETHabi = require("../abis/WETH.json");
 const WETHaddr = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
 
-const DAIabi = require("../abis/DAI.json");
+const ERC20abi = require("../abis/ERC20.json");
 const DAIaddr = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
+const UNIaddr = "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984";
 
 module.exports = {
   euler: new Contract(addressesEuler.euler, EulerAbi),
@@ -22,5 +23,6 @@ module.exports = {
   swap: new Contract(addressesEuler.swap, SwapAbi),
   exec: new Contract(addressesEuler.exec, ExecAbi),
   WETH: new Contract(WETHaddr, WETHabi),
-  DAI: new Contract(DAIaddr, DAIabi),
+  DAI: new Contract(DAIaddr, ERC20abi),
+  UNI: new Contract(UNIaddr, ERC20abi),
 };
