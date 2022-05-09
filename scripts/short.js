@@ -147,6 +147,11 @@ class Trader {
       await this.marketSigner.underlyingToAssetConfigUnresolved(
         this.tokenShortOn.address
       );
+    console.log("borrowFactor shoron", borrowFactor)
+    console.log("borrowFactor against", (await this.marketSigner.underlyingToAssetConfigUnresolved(
+      this.tokenAgainst.address
+    )).borrowFactor)
+
     const priceShortOn = await this.checkPrice(this.tokenShortOn, true);
     let mintAmount = collateralValue
       .mul(ONE)
@@ -182,7 +187,7 @@ class Trader {
             subAccountIdOut: 0,
             underlyingIn: this.tokenShortOn.address,
             underlyingOut: this.tokenAgainst.address,
-            amountIn: mintAmount,
+            amountIn: mintAmount.sub(parseEther("10")),
             amountOutMinimum: 0,
             deadline: 0,
             fee: 3000,
@@ -194,11 +199,6 @@ class Trader {
     await (
       await this.execSinger.batchDispatch(batchIterms, [this.userAddr])
     ).wait();
-
-    console.log(
-      "ETokenAgainst balance",
-      await this.ETokenAgainst.balanceOfUnderlying(this.userAddr)
-    );
 
     console.log("\nafter mint");
     // this.checkLiquidity(true);
@@ -350,15 +350,14 @@ async function main() {
     await shortTrader.enterMarket(shortTrader.tokenAgainst);
 
     await shortTrader.depositAction("against");
-    // await shortTrader.depositAction("shortOn");
 
     await shortTrader.checkAssetsValue(true);
 
     // leverage base = 10000
-    const leverage = 30000;   // max leverage is 3.001 (?)
+    const leverage = 40000;   // max leverage is 3.001 (?)
     await shortTrader.openShort(leverage);
 
-    console.log("open swap price", await checkSwapPrice());
+    console.log("open short position swap price", await checkSwapPrice());
 
     const { totalValue } = await shortTrader.checkAssetsValue(true);
 
@@ -392,7 +391,7 @@ async function main() {
     // );
 
     // await shortTrader.closeShort();
-    // console.log("close swap price", await checkSwapPrice());
+    // console.log("close short position swap price", await checkSwapPrice());
 
     const priceAfter = await shortTrader.checkPrice(
       shortTrader.tokenShortOn,
