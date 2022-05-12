@@ -354,7 +354,7 @@ async function main() {
     await shortTrader.checkAssetsValue(true);
 
     // leverage base = 10000
-    const leverage = 40000;   // max leverage is 3.001 (?)
+    const leverage = 30000;   // max leverage is 3.001 (?)
     await shortTrader.openShort(leverage);
 
     console.log("open short position swap price", await checkSwapPrice());
